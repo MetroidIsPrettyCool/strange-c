@@ -5,7 +5,8 @@
  * have a number of strange quirks, such as requiring a sizeof() operator that's
  * evaluated at runtime.
  *
- * Requires C99, or C11 and later with VLAs. (VLAs were made optional in C11.) */
+ * Requires C99, or C11 and later with VLAs. (VLAs were made optional in
+ * C11.) */
 
 #include <stdio.h>
 
@@ -27,11 +28,11 @@ int main(void) {
     for (size_t i = 1; i <= 10; ++i) {
         int some_array[i];
 
-        /* We can't make any C23 static_assert()s with the result of
+        /* We can't make any C11 static_assert()s with the result of
          * sizeof(some_array) because it's not a constant expression. */
 
-        #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 202311L
-            /* static_assert(sizeof(some_array) == sizeof(int*)); */
+        #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
+            /* static_assert(sizeof(some_array) == sizeof(int*), "FAIL!"); */
         #endif
 
         /* Regular asserts are fine though. */
@@ -70,12 +71,12 @@ int foo(size_t size, int some_array[size]) {
      *
      * GCC and Clang will warn about this fact with -Wsizeof-array-argument.
      *
-     * Because sizeof(int*) is a constant expression, we can do a C23
+     * Because sizeof(int*) is a constant expression, we can do a C11
      * static_assert() here instead of a regular assert (if the compiler
-     * supports C23). */
+     * supports C11). */
 
-    #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 202311L
-        static_assert(sizeof(some_array) == sizeof(int*));
+    #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
+        static_assert(sizeof(some_array) == sizeof(int*), "FAIL!");
     #else
         assert(sizeof(some_array) == sizeof(int*));
     #endif
