@@ -58,8 +58,11 @@ struct ty_ptr { void* p; enum my_types_variant_tags ty; };
 
 /* Macro that takes an expression and expands to a ty_ptr compound literal, with
  * a type tag value selected using the _Generic() operator. */
-#define MAKE_TY_PTR(x) \
-    { .p = &x, .ty = _Generic((x), MY_TYPES default: MY_TYPE_UNKNOWN) }
+#define MAKE_TY_PTR(x)                                                  \
+    (struct ty_ptr) {                                                   \
+        .p = &x,                                                        \
+        .ty = _Generic((x), MY_TYPES default: MY_TYPE_UNKNOWN)          \
+    }
 
 int main(void) {
     struct foo  a = { .a = 1, .b = 2 };
