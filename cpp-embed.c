@@ -14,7 +14,8 @@
 
 int main() {
     /* Embedding a binary resource with no embed parameters: */
-    {    constexpr char my_str[] = {
+    {
+        constexpr char my_str[] = {
             #embed "inc/hello_world.txt"
             , '\0'      /* note the file is not automatically null-terminated */
         };

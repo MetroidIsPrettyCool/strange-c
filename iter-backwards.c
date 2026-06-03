@@ -141,22 +141,22 @@ int main(void) {
         puts("Not supported by your compiler! (Did you try -std=c99?)");
     #endif
 
-   /* This works because, unlike signed integer arithmetic, unsigned integer
-    * wraparound IS well-defined.
-    *
-    * From the latest ANSI X3.159-1989 draft I can find, $3.1.2.5, paragraph 5;
-    * or N1256/N1570/N2176 $6.2.5, paragraph 9:
-    *
-    * "A computation involving unsigned operands can never overflow, because a
-    * result that cannot be represented by the resulting unsigned integer type
-    * is reduced modulo the number that is one greater than the largest value
-    * that can be represented by the resulting type."
-    *
-    * (N3220 and N3854 [latest C2Y draft at time of writing] say the same thing
-    * in different language in paragraphs 11 or 13, respectively, of $6.2.5.)
-    *
-    * Ergo, we know for a fact that SIZE_MAX will be the value of i once it's
-    * decremented below 0. */
+    /* This works because, unlike signed integer arithmetic, unsigned integer
+     * wraparound IS well-defined.
+     *
+     * From the latest ANSI X3.159-1989 draft I can find, $3.1.2.5, paragraph 5;
+     * or N1256/N1570/N2176 $6.2.5, paragraph 9:
+     *
+     * "A computation involving unsigned operands can never overflow, because a
+     * result that cannot be represented by the resulting unsigned integer type
+     * is reduced modulo the number that is one greater than the largest value
+     * that can be represented by the resulting type."
+     *
+     * (N3220 and N3854 [latest C2Y draft at time of writing] say the same thing
+     * in different language in paragraphs 11 or 13, respectively, of $6.2.5.)
+     *
+     * Ergo, we know for a fact that SIZE_MAX will be the value of i once it's
+     * decremented below 0. */
 
     puts("\nMethod 4a (less deceptive):");
     {

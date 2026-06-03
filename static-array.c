@@ -50,9 +50,11 @@ int main(void) {
     {
         size_t i;
         for (i = 0;
+
              i < BUFLEN
-                 && (buf[i] = getchar()) != EOF
-                 && buf[i] != '\n';
+             && (buf[i] = getchar()) != EOF
+             && buf[i] != '\n';
+
              ++i);
         buf[i] = '\0';
     }

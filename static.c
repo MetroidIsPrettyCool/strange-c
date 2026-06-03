@@ -21,10 +21,9 @@ static /* <- 1 */ void foo(size_t n,
  * (This requires VLA support in C11 and later if the size expression is not a
  * constant expression, like we've written here.) */
 
-#if defined(__STDC_VERSION__) \
-    && (__STDC_VERSION__ >= 199901L \
-        || (__STDC_VERSION__ >= 201112L \
-            && (!defined(__STDC_NO_VLA__) || __STDC_NO_VLA__ != 1)))
+#if __STDC_VERSION__ >= 199901L                                 \
+    || (__STDC_VERSION__ >= 201112L                             \
+        && (!defined(__STDC_NO_VLA__) || __STDC_NO_VLA__ != 1))
                            int arr[static /* <- 2 */ n]
 #else
                            int arr[]
@@ -59,7 +58,7 @@ static /* <- 1 */ void foo(size_t n,
     #endif
 }
 
-/* For clarify, here's that same function definition without comments or #if
+/* For clarity, here's that same function definition without comments or #if
  * guards:
  *
  * static void foo(size_t n, int arr[static n]) {

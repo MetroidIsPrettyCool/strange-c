@@ -30,7 +30,8 @@ int main(void) {
 
     /* We can also the "alternate add-assign" trick with unsigned integers: */
 
-    {   /* New scope to get around the "no mixed declarations and code" rule. */
+    {
+        /* New scope to get around the "no mixed declarations and code" rule. */
         unsigned int y = 40;
         y -=- 37;
         assert(y == 77);
