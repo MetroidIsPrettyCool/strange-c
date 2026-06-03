@@ -3,7 +3,7 @@
  *
  * At time of writing, this is the only reliable technique I've found to get an
  * inlined, vectorized string comparison in standard C on x64. It only works in
- * clang (again, at time of writing) and only with -O2 or greater. But it does
+ * Clang (again, at time of writing) and only with -O2 or greater. But it does
  * work.
  *
  * Requires C99 or later. */

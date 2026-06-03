@@ -125,7 +125,7 @@ int main(void) {
      *
      * If the compiler isn't smart enough to optimize this into a 64-bit
      * unsigned variable, having an non-power-of-2, wider-than-pointer-sized
-     * index will probably incur some overhead. gcc with -O0 represents i as the
+     * index will probably incur some overhead. GCC with -O0 represents i as the
      * register pair rdx:rax, and takes two or three times as many instructions
      * to do a given operation with it when compared to any of the other methods
      * mentioned here. (This goes away with -O1, at least.)
@@ -183,8 +183,8 @@ int main(void) {
      * "when the previous value of i was 0" like how post-decrement does it.
      *
      * Some testing with godbolt indicates that (at time of writing) current
-     * versions of gcc are able to optimize this version better than the other
-     * two, which feels correct. clang is smart enough to figure out they're all
+     * versions of GCC are able to optimize this version better than the other
+     * two, which feels correct. Clang is smart enough to figure out they're all
      * the same. */
 
     puts("\nMethod 5a (less deceptive):");
@@ -202,7 +202,7 @@ int main(void) {
         puts("Not supported by your compiler! (Did you try -std=c23?)");
     #endif
 
-    /* With optimizations gcc (and clang, for that matter) on x64 treats this
+    /* With optimizations GCC (and Clang, for that matter) on x64 treats this
      * exactly the same as the more deceptive version, presumably because it
      * understands i_less_than_0 is only an alias for the carry (unsigned
      * under/overflow) flag. */

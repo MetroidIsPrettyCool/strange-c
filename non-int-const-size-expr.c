@@ -14,12 +14,12 @@
  * 3. passing an array that is smaller than the size expression (N3220 $6.7.7.4
  *    paragraph 6, again).
  *
- * At time of writing, gcc is able to warn on the first and third, and clang is
- * able to warn on only the first. (I should note that gcc is ONLY able to warn
+ * At time of writing, GCC is able to warn on the first and third, and Clang is
+ * able to warn on only the first. (I should note that GCC is ONLY able to warn
  * on the first UB if the static size expression is no more complicated than an
  * integer constant expression [e.g. "4" or "sizeof(foo)"] or exactly one
  * variable identifier [e.g. "n" or "len" or "size"]. If the size expression
- * were, say, "str_len + 1", then gcc would not produce a -Wstringop-overread
+ * were, say, "str_len + 1", then GCC would not produce a -Wstringop-overread
  * diagnostic in the case of a mismatched string length.)
  *
  * $ gcc -std=c99 -Wall -Wextra -pedantic non-int-const-size-expr.c
@@ -67,7 +67,7 @@
  *     size_t tab_width
  * ) { ... }
  *
- * gcc offers an extension called "forward parameter declarations", which would
+ * GCC offers an extension called "forward parameter declarations", which would
  * allow us to declare our parameters before the actual parameter list like so:
  *
  * void print_bytes(
