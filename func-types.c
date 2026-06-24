@@ -41,7 +41,7 @@ int main() {
 
     /* 5. *foo and foo have compatible types, so we can't write this: */
 
-    /* puts(_Generic(foo,typeof(*foo):"1",typeof(foo):"2a)); */
+    /* puts(_Generic(foo,typeof(*foo):"1",typeof(foo):"2a")); */
 
     /* 6. &foo and foo have incompatible types, so we CAN write this: */
 
