@@ -24,6 +24,8 @@ int foo(size_t size, int some_array[size]);
  * this is) according to N1256 $6.7.5.2 paragraph 5, but Clang doesn't like it
  * -- with -Wall it trips -Warray-parameter. Silly! */
 
+double bar(size_t size, int (*some_array) [size]);
+
 int main(void) {
     for (size_t i = 1; i <= 10; ++i) {
         int some_array[i];
@@ -42,11 +44,12 @@ int main(void) {
             some_array[j] = j;
 
         i += 7;
-        printf("%2zd != %2zd (or %2zd), sum = %2d\n",
+        printf("%2zd != %2zd (or %2zd), sum = %2d, average = %5.2f\n",
                sizeof(some_array),
                i * sizeof(int),
                i,
-               foo(sizeof(some_array) / sizeof(int), some_array));
+               foo(sizeof(some_array) / sizeof(int), some_array),
+               bar(sizeof(some_array) / sizeof(int), &some_array));
         i -= 7;
 
         /* Notice when running this printf that sizeof(some_array) reflects the
@@ -91,4 +94,21 @@ int foo(size_t size, int some_array[size]) {
      * even initialize a VLA whatsoever (N1256 $6.7.8 paragraph 3). */
 
     return sum;
+}
+
+/* The solution to this is to pass a pointer to the VLA, rather than the VLA
+ * directly, with the following bemusing declaration syntax.
+ *
+ * This does require us to always handle some_array through the pointer
+ * indirection, which is pretty silly, but whatever. */
+double bar(size_t size, int (*some_array) [size]) {
+    int sum = 0;
+
+    for (size_t i = 0; i < size; ++i) {
+        sum += (*some_array)[i];
+    }
+
+    assert(sizeof(*some_array) == sizeof(int) * size);
+
+    return (double)sum / (double)size;
 }
