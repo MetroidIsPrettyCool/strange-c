@@ -1,5 +1,5 @@
 /* The C Preprocessor (CPP) includes two useful but slightly confusing
- * preprocessor macro-only operators: # ($6.10.5.2), and ## (6.10.5.3). Spelled
+ * preprocessor macro-only operators: # ($6.10.5.2), and ## ($6.10.5.3). Spelled
  * very similar, almost wholly unrelated purposes.
  *
  * # is a unary prefix operator that converts a token to a string literal, for
