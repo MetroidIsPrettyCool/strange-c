@@ -37,11 +37,12 @@ int main(void) {
 
     #if __STDC_VERSION__ > 202311L
         /* First, E1[E2] is only equivalent to *((E1)+(E2)) (no outer parens)
-         * when either operand "has pointer type" in C2y. (N3886 $6.5.3.2 p2-3).
+         * when either operand "has pointer type" in C2y. (N3886 $6.5.3.2 para.
+         * 2-3).
          *
          * This enables a new dodgy-looking but conformant party trick, by
          * taking into account the new special-casing of adding 0 to a null
-         * pointer in $6.5.7 p9 (N3886):
+         * pointer in $6.5.7 para. 9 (N3886):
          *
          * "If the pointer operand is not null, and the pointer operand and
          * result do not point to elements of the same array object or one past
@@ -55,7 +56,7 @@ int main(void) {
          * not be used as the operand of a unary * operator that is evaluated."
          *
          * and the fact that &*(some_complete_type_t*)NULL is now defined by
-         * $6.5.4.3 p3 (N3886) _and_ defined to not be evaluated:
+         * $6.5.4.3 para. 3 (N3886) _and_ defined to not be evaluated:
          *
          * "If the operand is the result of a unary * operator, neither that
          * operator nor the & operator is evaluated and the result is as if both
@@ -73,8 +74,8 @@ int main(void) {
         );
 
         /* Note that we have to explicitly cast to char* because, of all the
-         * myriad things that NULL can be defined as, none of them have pointer
-         * to complete object type. */
+         * myriad things that NULL can be defined as, none of them have "pointer
+         * to complete object" type. */
     #endif
 
     #if __STDC_VERSION__ <= 202311L
