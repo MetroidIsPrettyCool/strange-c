@@ -275,9 +275,11 @@ int main(void) {
             assert(n == alignof(int));
         #endif
     }
-    /* Unlike previous "of"s, they are not operators. Also, unlike alignof,
-     * they were introduced as new keywords without a _Typeof spelling and
-     * corresponding header. Heavens knows why. */
+    /* Unlike previous "of"s, they are not operators, they're specifiers.
+     * Confusingly, the standard goes on to say that together they're also
+     * called "the typeof operators". Also, unlike alignof, they were introduced
+     * as new keywords without a _Typeof spelling and corresponding header.
+     * Heavens knows why. */
 
     /* They can be used anywhere that a type name can: */
     {
