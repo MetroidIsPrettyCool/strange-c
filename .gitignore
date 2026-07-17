@@ -9,10 +9,11 @@ designated-init
 extern-unsequenced
 func-types
 iter-backwards
+non-empty-tfam
 non-int-const-size-expr
+of
 or-die
 reflection
-runtime-sizeof
 size-expr-stack-overflow
 static-array
 static
