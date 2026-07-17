@@ -198,9 +198,8 @@ int main(void) {
     }
     /* Whether this actually works is implementation-defined -- implementors can
      * insert padding for arbitrary reasons, not simply to satisfy alignment
-     * requirements -- and also UB as of C23, with the addition of the
-     * requirement that "if the specified type name contains a comma not between
-     * matching parentheses [...] the behavior is undefined."
+     * requirements -- and also probably UB prior to C23, as we're defining a
+     * type in offsetof rather than providing a type name.
      *
      * I do not recommend you use this macro. */
 
@@ -276,10 +275,10 @@ int main(void) {
         #endif
     }
     /* Unlike previous "of"s, they are not operators, they're specifiers.
-     * Confusingly, the standard goes on to say that together they're also
-     * called "the typeof operators". Also, unlike alignof, they were introduced
-     * as new keywords without a _Typeof spelling and corresponding header.
-     * Heavens knows why. */
+     * Confusingly, the standard also says that together they're called "the
+     * typeof operators", and goes on to call them operators individually, too.
+     * Also, unlike alignof, they were introduced as new keywords without a
+     * _Typeof spelling and corresponding header. Heavens knows why. */
 
     /* They can be used anywhere that a type name can: */
     {
