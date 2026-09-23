@@ -2,6 +2,7 @@ a.out
 *.o
 add-assign-pseudo-op
 auto
+bswap
 comma
 cpp-embed
 cpp-token-to-wcs
