@@ -1,12 +1,12 @@
 /* C23 added an "embed" preprocessor directive, which takes a file (or,
- * technically, a "a source of data accessible from the translation
- * environment") and converts it to a series of comma-separated unsigned
- * character literals; as well as a corresponding __has_embed() conditional
- * inclusion expression.
- *
- * Here's some example of their use.
- *
- * Requires C23 or later. */
+   technically, a "a source of data accessible from the translation
+   environment") and converts it to a series of comma-separated unsigned
+   character literals; as well as a corresponding __has_embed() conditional
+   inclusion expression.
+
+   Here's some example of their use.
+
+   Requires C23 or later. */
 
 #include <stdio.h>
 
@@ -23,7 +23,7 @@ int main() {
     }
 
     /* Embedding a binary resource, but using the suffix embed parameter to
-     * null-terminate it in only one line: */
+       null-terminate it in only one line: */
     {
         constexpr char my_str[] = {
             #embed "inc/hello_world.txt" suffix(, '\0')
@@ -32,8 +32,8 @@ int main() {
     }
 
     /* Embedding a binary resource using the suffix embed parameter to
-     * null-terminate it in only one line, and using the prefix embed parameter
-     * to prefix some additional data: */
+       null-terminate it in only one line, and using the prefix embed parameter
+       to prefix some additional data: */
     {
         constexpr char my_str[] = {
             #embed "inc/hello_world.txt"                            \
@@ -48,8 +48,8 @@ int main() {
     }
 
     /* Embedding a binary resource with the if_empty parameter to provide an
-     * alternative value if the resource is found but empty -- goodbye_world.txt
-     * is such a file: */
+       alternative value if the resource is found but empty -- goodbye_world.txt
+       is such a file: */
     {
         constexpr char my_str[] = {
             #embed "inc/goodbye_world.txt"                              \
@@ -64,7 +64,7 @@ int main() {
         fputs(my_str, stdout);
 
         /* Note that the prefix and suffix are ignored when the resource is
-         * empty: */
+           empty: */
         static_assert(sizeof(my_str) == sizeof("File empty at comptime\n"));
         assert(my_str[0] == 'F');
         assert(my_str[1] == 'i');
@@ -73,13 +73,13 @@ int main() {
         assert(my_str[sizeof(my_str) - 2] == '\n');
         assert(my_str[sizeof(my_str) - 1] == '\0');
         /* This means that the null terminator on its own line is not
-         * semantically identical to the suffix(, '\0') version -- the latter
-         * will result in an empty initializer list if the resource is empty.
-         * Choose which behavior you want wisely! */
+           semantically identical to the suffix(, '\0') version -- the latter
+           will result in an empty initializer list if the resource is empty.
+           Choose which behavior you want wisely! */
     }
 
     /* Another way of providing an alternative expansion using the __has_embed()
-     * expression, with a file that exists but is empty: */
+       expression, with a file that exists but is empty: */
     {
         #define RESOURCE "inc/goodbye_world.txt"
             constexpr char my_str[] = {
@@ -134,8 +134,8 @@ int main() {
     }
 
     /* Here's an example of the limit parameter to only embed up to a given
-     * number of bytes from a resource (only works on platforms where
-     * /dev/random exists): */
+       number of bytes from a resource (only works on platforms where
+       /dev/random exists): */
     {
         #define RANDOM_NUMBER_SOURCE </dev/random>
         #if __has_embed(RANDOM_NUMBER_SOURCE) == __STDC_EMBED_FOUND__
@@ -160,7 +160,7 @@ int main() {
     }
 
     /* __has_embed() expressions can have parameters too, but they don't mean
-     * much as of C23: */
+       much as of C23: */
     {
         #if __has_embed(                    \
                 "inc/hello_world.txt"       \
@@ -197,7 +197,7 @@ int main() {
     }
 
     /* ...except for limit(), which will turn __STDC_EMBED_FOUND__ into
-     * __STDC_EMBED_EMPTY__ if the resource width is 0: */
+       __STDC_EMBED_EMPTY__ if the resource width is 0: */
     {
         #if __has_embed(                    \
                 "inc/hello_world.txt"       \
@@ -234,7 +234,7 @@ int main() {
     }
 
     /* Finally, on a similar note, here's an silly example of using limit(0) to
-     * deliberately trigger the is_empty parameter: */
+       deliberately trigger the is_empty parameter: */
     {
         #ifndef SOME_COMPILE_TIME_SWITCH
             #define SOME_COMPILE_TIME_SWITCH 0

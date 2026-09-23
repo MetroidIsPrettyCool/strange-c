@@ -1,5 +1,5 @@
 /* An example of "reflection" in C using X-Macros and _Generic. Requires C11 or
- * later. */
+   later. */
 
 #include <stdio.h>
 
@@ -13,9 +13,9 @@
     X( union,  quux, { int e; float f; } )
 
 /* Declare them:
- *
- * We have to use a variadic macro here because enumerator-lists are parsed as
- * multiple arguments -- "{ BAZ_1", "BAZ_2", ... "BAZ_4 }" */
+
+   We have to use a variadic macro here because enumerator-lists are parsed as
+   multiple arguments -- "{ BAZ_1", "BAZ_2", ... "BAZ_4 }" */
 #define X(type_category, id, ...)               \
     type_category id __VA_ARGS__;
 
@@ -34,8 +34,8 @@
 struct ty_ptr { void* p; enum my_types_variant_tags ty; };
 
 /* Define a function for each type T that either casts a ty_ptr to a pointer to
- * T (if ty_ptr is tagged as a pointer to T) or returns NULL (if the ty_ptr is
- * not tagged as a pointer to T). */
+   T (if ty_ptr is tagged as a pointer to T) or returns NULL (if the ty_ptr is
+   not tagged as a pointer to T). */
 #define X(type_category, id, ...)                               \
     static inline                                               \
     type_category id*                                           \
@@ -52,12 +52,12 @@ struct ty_ptr { void* p; enum my_types_variant_tags ty; };
 #undef X
 
 /* This will be our definition of X() for the rest of the file -- we only care
- * about using MY_TYPES for the MAKE_TY_PTR() macro. */
+   about using MY_TYPES for the MAKE_TY_PTR() macro. */
 #define X(type_category, id, ...)                       \
     type_category id: MY_TYPE_##type_category##_##id,
 
 /* Macro that takes an expression and expands to a ty_ptr compound literal, with
- * a type tag value selected using the _Generic() operator. */
+   a type tag value selected using the _Generic() operator. */
 #define MAKE_TY_PTR(x)                                                  \
     (struct ty_ptr) {                                                   \
         .p = &x,                                                        \
@@ -96,12 +96,12 @@ int main(void) {
         else if (ty_ptr_maybe_union_quux(array[i])) {
             union quux quux = *ty_ptr_maybe_union_quux(array[i]);
             /* Reading from the wrong union member is not actually UB, as you
-             * might expect, but merely /unspecified/ behavior. See N1570 (or
-             * N3220) $6.2.6.1 paragraphs 6 and 7.
-             *
-             * Still a portability concern, of course, but unlike UB it isn't an
-             * erroneous code path. The value of the .e member in this case will
-             * be *something* valid. */
+               might expect, but merely /unspecified/ behavior. See N1570 (or
+               N3220) $6.2.6.1 paragraphs 6 and 7.
+
+               Still a portability concern, of course, but unlike UB it isn't an
+               erroneous code path. The value of the .e member in this case will
+               be *something* valid. */
             printf("%08X (%f)\n", quux.e, quux.f);
         }
     }

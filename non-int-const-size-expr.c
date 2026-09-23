@@ -1,54 +1,54 @@
 /* This is an example of the diagnostic potential (but also limitations) of the
- * C99 static array size keyword when the size expression references another
- * parameter.
- *
- * This program demonstrates three kinds of UB relating to size expressions in
- * array declarations:
- *
- * 1. passing a null pointer as an argument where the parameter is required by
- *    the static keyword to be a non-null pointer (N3220 $6.7.7.4 paragraph 6),
- *
- * 2. a non-constant size expression evaluating to a value not greater than zero
- *    (N3220 $6.7.7.3 paragraph 5), and,
- *
- * 3. passing an array that is smaller than the size expression (N3220 $6.7.7.4
- *    paragraph 6, again).
- *
- * At time of writing, GCC is able to warn on the first and third, and Clang is
- * able to warn on only the first. (I should note that GCC is ONLY able to warn
- * on the first UB if the static size expression is no more complicated than an
- * integer constant expression [e.g. "4" or "sizeof(foo)"] or exactly one
- * variable identifier [e.g. "n" or "len" or "size"]. If the size expression
- * were, say, "str_len + 1", then GCC would not produce a -Wstringop-overread
- * diagnostic in the case of a mismatched string length.)
- *
- * $ gcc -std=c99 -Wall -Wextra -pedantic non-int-const-size-expr.c
- * non-int-const-size-expr.c: In function ‘main’:
- * non-int-const-size-expr.c:87:5: warning: argument 2 null where non-null expected [-Wnonnull]
- *    87 |     print_bytes(sizeof(array1),   NULL, 8, 4);
- *       |     ^~~~~~~~~~~
- * non-int-const-size-expr.c:42:6: note: in a call to function ‘print_bytes’ declared ‘nonnull’
- *    42 | void print_bytes(
- *       |      ^~~~~~~~~~~
- * non-int-const-size-expr.c:89:5: warning: ‘print_bytes’ reading 32 bytes from a region of size 5 [-Wstringop-overread]
- *    89 |     print_bytes(sizeof(array1), array2, 8, 4);
- *       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * non-int-const-size-expr.c:89:5: note: referencing argument 2 of type ‘const char[]’
- * non-int-const-size-expr.c:42:6: note: in a call to function ‘print_bytes’
- *    42 | void print_bytes(
- *       |      ^~~~~~~~~~~
- *
- * $ clang -std=c99 -Wall -Wextra -pedantic non-int-const-size-expr.c
- * non-int-const-size-expr.c:87:5: warning: null passed to a callee that requires a non-null argument
- *       [-Wnonnull]
- *    87 |     print_bytes(sizeof(array1),   NULL, 8, 4);
- *       |     ^                             ~~~~
- * non-int-const-size-expr.c:44:16: note: callee declares array parameter as static here
- *    44 |     char const buf[const restrict static n],
- *       |                ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
- * 1 warning generated.
- *
- * Requires C99, or C11 and later with VLAs. */
+   C99 static array size keyword when the size expression references another
+   parameter.
+
+   This program demonstrates three kinds of UB relating to size expressions in
+   array declarations:
+
+   1. passing a null pointer as an argument where the parameter is required by
+      the static keyword to be a non-null pointer (N3220 $6.7.7.4 paragraph 6),
+
+   2. a non-constant size expression evaluating to a value not greater than zero
+      (N3220 $6.7.7.3 paragraph 5), and,
+
+   3. passing an array that is smaller than the size expression (N3220 $6.7.7.4
+      paragraph 6, again).
+
+   At time of writing, GCC is able to warn on the first and third, and Clang is
+   able to warn on only the first. (I should note that GCC is ONLY able to warn
+   on the first UB if the static size expression is no more complicated than an
+   integer constant expression [e.g. "4" or "sizeof(foo)"] or exactly one
+   variable identifier [e.g. "n" or "len" or "size"]. If the size expression
+   were, say, "str_len + 1", then GCC would not produce a -Wstringop-overread
+   diagnostic in the case of a mismatched string length.)
+
+   $ gcc -std=c99 -Wall -Wextra -pedantic non-int-const-size-expr.c
+   non-int-const-size-expr.c: In function ‘main’:
+   non-int-const-size-expr.c:87:5: warning: argument 2 null where non-null expected [-Wnonnull]
+      87 |     print_bytes(sizeof(array1),   NULL, 8, 4);
+         |     ^~~~~~~~~~~
+   non-int-const-size-expr.c:42:6: note: in a call to function ‘print_bytes’ declared ‘nonnull’
+      42 | void print_bytes(
+         |      ^~~~~~~~~~~
+   non-int-const-size-expr.c:89:5: warning: ‘print_bytes’ reading 32 bytes from a region of size 5 [-Wstringop-overread]
+      89 |     print_bytes(sizeof(array1), array2, 8, 4);
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   non-int-const-size-expr.c:89:5: note: referencing argument 2 of type ‘const char[]’
+   non-int-const-size-expr.c:42:6: note: in a call to function ‘print_bytes’
+      42 | void print_bytes(
+         |      ^~~~~~~~~~~
+
+   $ clang -std=c99 -Wall -Wextra -pedantic non-int-const-size-expr.c
+   non-int-const-size-expr.c:87:5: warning: null passed to a callee that requires a non-null argument
+         [-Wnonnull]
+      87 |     print_bytes(sizeof(array1),   NULL, 8, 4);
+         |     ^                             ~~~~
+   non-int-const-size-expr.c:44:16: note: callee declares array parameter as static here
+      44 |     char const buf[const restrict static n],
+         |                ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+   Requires C99, or C11 and later with VLAs. */
 
 #include <stdio.h>
 
@@ -58,28 +58,28 @@
 #define MAX_TAB_WIDTH 256
 
 /* Note that we have to declare n before buf for n to be defined in the size
- * expression. This would not be legal:
- *
- * void print_bytes(
- *     char const buf[const restrict static n],
- *     size_t n,
- *     size_t columns,
- *     size_t tab_width
- * ) { ... }
- *
- * GCC offers an extension called "forward parameter declarations", which would
- * allow us to declare our parameters before the actual parameter list like so:
- *
- * void print_bytes(
- *     size_t n;
- *
- *     char const buf[const restrict static n],
- *     size_t n,
- *     size_t columns,
- *     size_t tab_width
- * ) { ... }
- *
- * But this obviously isn't portable. Alas! */
+   expression. This would not be legal:
+
+   void print_bytes(
+       char const buf[const restrict static n],
+       size_t n,
+       size_t columns,
+       size_t tab_width
+   ) { ... }
+
+   GCC offers an extension called "forward parameter declarations", which would
+   allow us to declare our parameters before the actual parameter list like so:
+
+   void print_bytes(
+       size_t n;
+
+       char const buf[const restrict static n],
+       size_t n,
+       size_t columns,
+       size_t tab_width
+   ) { ... }
+
+   But this obviously isn't portable. Alas! */
 void print_bytes(
     size_t n,
     char const buf[const restrict static n],

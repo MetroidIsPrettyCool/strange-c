@@ -1,12 +1,12 @@
 /* A demonstration of the optimization benefits of the oft-overlooked C99 array
- * minimum size static keyword.
- *
- * At time of writing, this is the only reliable technique I've found to get an
- * inlined, vectorized string comparison in standard C on x64. It only works in
- * Clang (again, at time of writing) and only with -O2 or greater. But it does
- * work.
- *
- * Requires C99 or later. */
+   minimum size static keyword.
+
+   At time of writing, this is the only reliable technique I've found to get an
+   inlined, vectorized string comparison in standard C on x64. It only works in
+   Clang (again, at time of writing) and only with -O2 or greater. But it does
+   work.
+
+   Requires C99 or later. */
 
 #include <stdio.h>
 

@@ -1,5 +1,5 @@
 /* Like the --> pseudo-operator in iter-backwards.c, there's an "alternate
- * add-assign" pseudo-operator too. Requires C89 or later. */
+   add-assign" pseudo-operator too. Requires C89 or later. */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,11 +19,11 @@ int main(void) {
            x);
 
     /* What we've actually written here is, of course, "x -= -1" and "x -= -(1 +
-     * 1)", just with deceptive whitespace. Part of the trick is that the unary
-     * - (sign-negation) is actually an operator, and not restricted to
-     * appearing before a literal (as you might have expected).
-     *
-     * Thus, expressions like the following are also perfectly legal: */
+       1)", just with deceptive whitespace. Part of the trick is that the unary
+       - (sign-negation) is actually an operator, and not restricted to
+       appearing before a literal (as you might have expected).
+
+       Thus, expressions like the following are also perfectly legal: */
 
     printf("%hd\n", -x);
     printf("%f\n", -sqrt(4.0F));
@@ -39,14 +39,14 @@ int main(void) {
     }
 
     /* Although this might appear it could cause potential portability problems
-     * what with the weak type coercion and mixing signedness, consulting the
-     * latest ANSI X3.159-1989 draft I can find and taking clauses $3.1.2.5,
-     * $3.2.1.2, $3.2.1.5, and $3.3.16.2 together, we find that the signed
-     * rvalue will be converted to unsigned int because the lvalue is an
-     * unsigned int, and, since the rvalue is negative, it will be converted to
-     * unsigned int by adding it to INT_MAX + 1; then when it's subtracted from
-     * y, that subtraction will be performed modulo INT_MAX -- all of which
-     * comes together to make this operation fully defined. Phew! */
+       what with the weak type coercion and mixing signedness, consulting the
+       latest ANSI X3.159-1989 draft I can find and taking clauses $3.1.2.5,
+       $3.2.1.2, $3.2.1.5, and $3.3.16.2 together, we find that the signed
+       rvalue will be converted to unsigned int because the lvalue is an
+       unsigned int, and, since the rvalue is negative, it will be converted to
+       unsigned int by adding it to INT_MAX + 1; then when it's subtracted from
+       y, that subtraction will be performed modulo INT_MAX -- all of which
+       comes together to make this operation fully defined. Phew! */
 
     return EXIT_SUCCESS;
 }

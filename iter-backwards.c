@@ -1,10 +1,10 @@
 /* Here are a few (potentially) slightly confusing ways to iterate backwards
- * through an array, as well as an demonstration of the upcoming C2Y countof()
- * operator (if you've got it available) for calculating the number of elements
- * in an array.
- *
- * Each method requires a different minimum language version, they've been #if
- * gated to ensure only the supported ones will be compiled. */
+   through an array, as well as an demonstration of the upcoming C2Y countof()
+   operator (if you've got it available) for calculating the number of elements
+   in an array.
+
+   Each method requires a different minimum language version, they've been #if
+   gated to ensure only the supported ones will be compiled. */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,10 +48,10 @@ int main(void) {
     }
 
     /* "-->" is not a real operator, of course, although in this context it
-     * looks like some kind of "iterate to this number" syntax. If we shuffle
-     * the whitespace around, what we've actually written is "(i--) > 0" --
-     * equivalent to testing that i is greater than 0, then decrementing i, then
-     * continuing to loop if the test came back true. */
+       looks like some kind of "iterate to this number" syntax. If we shuffle
+       the whitespace around, what we've actually written is "(i--) > 0" --
+       equivalent to testing that i is greater than 0, then decrementing i, then
+       continuing to loop if the test came back true. */
 
     puts("\nMethod 1a (less deceptive):");
     {
@@ -73,27 +73,27 @@ int main(void) {
     }
 
     /* There's actually nothing underhanded here, I've just found that it's very
-     * apparently unintuitive for people to consider ptrdiff_t to the signed
-     * equivalent to size_t. I mean, I guess the cast to signed could itself be
-     * underhanded if you're iterating through a very large array... but I
-     * digress.
-     *
-     * ptrdiff_t is not *exactly* "the signed equivalent to size_t", of course,
-     * and no version of the standard makes such a claim, but if you read
-     * between the lines it's hard to imagine a reasonable implementation where
-     * it isn't *morally* "signed size_t". The ptrdiff_t(3type) man page
-     * concurs:
-     *
-     * "Used for a count of elements, or an array index. It is the result of
-     * subtracting two pointers. It is a signed integer type capable of storing
-     * values in the range [PTRDIFF_MIN, PTRDIFF_MAX]."
-     *
-     * Anyway I wanted to bring this up because POSIX has a sneakily named
-     * "ssize_t" type that *isn't* actually a signed equivalent of size_t, and
-     * that really trips people up. ssize_t is... weird, and not guaranteed to
-     * be able to store negative numbers below -1, because it's meant for
-     * returning a size or an *error*, like read(3) or write(3), and not
-     * representing negative indices. (That's what ptrdiff_t is for.) */
+       apparently unintuitive for people to consider ptrdiff_t to the signed
+       equivalent to size_t. I mean, I guess the cast to signed could itself be
+       underhanded if you're iterating through a very large array... but I
+       digress.
+
+       ptrdiff_t is not *exactly* "the signed equivalent to size_t", of course,
+       and no version of the standard makes such a claim, but if you read
+       between the lines it's hard to imagine a reasonable implementation where
+       it isn't *morally* "signed size_t". The ptrdiff_t(3type) man page
+       concurs:
+
+       "Used for a count of elements, or an array index. It is the result of
+       subtracting two pointers. It is a signed integer type capable of storing
+       values in the range [PTRDIFF_MIN, PTRDIFF_MAX]."
+
+       Anyway I wanted to bring this up because POSIX has a sneakily named
+       "ssize_t" type that *isn't* actually a signed equivalent of size_t, and
+       that really trips people up. ssize_t is... weird, and not guaranteed to
+       be able to store negative numbers below -1, because it's meant for
+       returning a size or an *error*, like read(3) or write(3), and not
+       representing negative indices. (That's what ptrdiff_t is for.) */
 
     #if defined(__STDC_VERSION__) \
         && __STDC_VERSION__ >= 202311L \
@@ -113,24 +113,24 @@ int main(void) {
     #endif
 
     /* This one isn't all that underhanded either, but it is pretty ugly. All we
-     * want is a signed integer type that to get a signed integer type big
-     * enough to fit both SIZE_MAX and -1, so that we don't have to worry about
-     * precision loss or not being able to represent negative numbers.
-     *
-     * The problem is that C doesn't really provide any portable facilities for
-     * describing integer types relative to any of the standard synonym types,
-     * so we have to lean on C23 bit-precise integers instead -- hence the
-     * necessity for a #if check that SIZE_WIDTH + 1 isn't too wide for the
-     * compiler to cope.
-     *
-     * If the compiler isn't smart enough to optimize this into a 64-bit
-     * unsigned variable, having an non-power-of-2, wider-than-pointer-sized
-     * index will probably incur some overhead. GCC with -O0 represents i as the
-     * register pair rdx:rax, and takes two or three times as many instructions
-     * to do a given operation with it when compared to any of the other methods
-     * mentioned here. (This goes away with -O1, at least.)
-     *
-     * So, y'know, be mindful. */
+       want is a signed integer type that to get a signed integer type big
+       enough to fit both SIZE_MAX and -1, so that we don't have to worry about
+       precision loss or not being able to represent negative numbers.
+
+       The problem is that C doesn't really provide any portable facilities for
+       describing integer types relative to any of the standard synonym types,
+       so we have to lean on C23 bit-precise integers instead -- hence the
+       necessity for a #if check that SIZE_WIDTH + 1 isn't too wide for the
+       compiler to cope.
+
+       If the compiler isn't smart enough to optimize this into a 64-bit
+       unsigned variable, having an non-power-of-2, wider-than-pointer-sized
+       index will probably incur some overhead. GCC with -O0 represents i as the
+       register pair rdx:rax, and takes two or three times as many instructions
+       to do a given operation with it when compared to any of the other methods
+       mentioned here. (This goes away with -O1, at least.)
+
+       So, y'know, be mindful. */
 
     puts("\nMethod 4: != SIZE_MAX:");
     #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
@@ -142,21 +142,21 @@ int main(void) {
     #endif
 
     /* This works because, unlike signed integer arithmetic, unsigned integer
-     * wraparound IS well-defined.
-     *
-     * From the latest ANSI X3.159-1989 draft I can find, $3.1.2.5, paragraph 5;
-     * or N1256/N1570/N2176 $6.2.5, paragraph 9:
-     *
-     * "A computation involving unsigned operands can never overflow, because a
-     * result that cannot be represented by the resulting unsigned integer type
-     * is reduced modulo the number that is one greater than the largest value
-     * that can be represented by the resulting type."
-     *
-     * (N3220 and N3854 [latest C2Y draft at time of writing] say the same thing
-     * in different language in paragraphs 11 or 13, respectively, of $6.2.5.)
-     *
-     * Ergo, we know for a fact that SIZE_MAX will be the value of i once it's
-     * decremented below 0. */
+       wraparound IS well-defined.
+
+       From the latest ANSI X3.159-1989 draft I can find, $3.1.2.5, paragraph 5;
+       or N1256/N1570/N2176 $6.2.5, paragraph 9:
+
+       "A computation involving unsigned operands can never overflow, because a
+       result that cannot be represented by the resulting unsigned integer type
+       is reduced modulo the number that is one greater than the largest value
+       that can be represented by the resulting type."
+
+       (N3220 and N3854 [latest C2Y draft at time of writing] say the same thing
+       in different language in paragraphs 11 or 13, respectively, of $6.2.5.)
+
+       Ergo, we know for a fact that SIZE_MAX will be the value of i once it's
+       decremented below 0. */
 
     puts("\nMethod 4a (less deceptive):");
     {
@@ -178,14 +178,14 @@ int main(void) {
     #endif
 
     /* This one works a lot like "-->", but uses the new C23 stdbit type generic
-     * checked arithmetic macros instead; in this case ckd_sub() returns false
-     * (true before we logically invert it) when i goes below zero, and not
-     * "when the previous value of i was 0" like how post-decrement does it.
-     *
-     * Some testing with godbolt indicates that (at time of writing) current
-     * versions of GCC are able to optimize this version better than the other
-     * two, which feels correct. Clang is smart enough to figure out they're all
-     * the same. */
+       checked arithmetic macros instead; in this case ckd_sub() returns false
+       (true before we logically invert it) when i goes below zero, and not
+       "when the previous value of i was 0" like how post-decrement does it.
+
+       Some testing with godbolt indicates that (at time of writing) current
+       versions of GCC are able to optimize this version better than the other
+       two, which feels correct. Clang is smart enough to figure out they're all
+       the same. */
 
     puts("\nMethod 5a (less deceptive):");
     #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 202311L
@@ -203,9 +203,9 @@ int main(void) {
     #endif
 
     /* With optimizations GCC (and Clang, for that matter) on x64 treats this
-     * exactly the same as the more deceptive version, presumably because it
-     * understands i_less_than_0 is only an alias for the carry (unsigned
-     * under/overflow) flag. */
+       exactly the same as the more deceptive version, presumably because it
+       understands i_less_than_0 is only an alias for the carry (unsigned
+       under/overflow) flag. */
 
     return EXIT_SUCCESS;
 }

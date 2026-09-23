@@ -1,8 +1,8 @@
 /* C99 introduced... uh, many things...
- *
- * One of the most unambiguously useful of these things are designed initializer
- * lists. Here are some examples, some of which you might not have realized were
- * possible. Requires C99, of course. */
+
+   One of the most unambiguously useful of these things are designed initializer
+   lists. Here are some examples, some of which you might not have realized were
+   possible. Requires C99, of course. */
 
 #include <assert.h>
 
@@ -67,20 +67,20 @@ int main(void) {
             .u = { .a = 1 },
 
             /* Note that scalar initializers can be surrounded by braces, too:
-             * (GCC and Clang both warn about this, as it's dodgy style. Maybe
-             * useful for macros, though?) */
+               (GCC and Clang both warn about this, as it's dodgy style. Maybe
+               useful for macros, though?) */
             .a = { -2 },
 
             .b = 7.0,
 
             /* You can provide an initializer for a given designator multiple
-             * times, the last one wins. Useful for macros, potentially
-             * confusing. Clang will warn about this with
-             * "-Winitializer-overrides". */
+               times, the last one wins. Useful for macros, potentially
+               confusing. Clang will warn about this with
+               "-Winitializer-overrides". */
             .b = 37.0,
 
             /* If you only give some initializers designations, then it just
-             * continues in sequence: */
+               continues in sequence: */
             .c = { [3] = 10, 20, [5] = 30, 16 },
 
             /* You can also mix and match designator "levels": */

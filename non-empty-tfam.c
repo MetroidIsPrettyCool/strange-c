@@ -1,11 +1,11 @@
 /* Example of a non-empty array structure type using char punning and flexible
- * array members, (potentially) a useful complement for [static 1] declarators.
- * AFAICT this does not violate strict aliasing because character types are...
- * privileged.
- *
- * This example uses the C23 features char8_t and stdc_leading_ones(), I have
- * provided some (naive) C11/C17 backports to allow this to compile under
- * CompCert. */
+   array members, (potentially) a useful complement for [static 1] declarators.
+   AFAICT this does not violate strict aliasing because character types are...
+   privileged.
+
+   This example uses the C23 features char8_t and stdc_leading_ones(), I have
+   provided some (naive) C11/C17 backports to allow this to compile under
+   CompCert. */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -60,22 +60,22 @@ static_assert(
 );
 
 /* Get next multi-byte character in UTF-8 string PTR.
- *
- * Call with non-null PTR to set up internal static variable and get the first
- * character, call with null PTR to get subsequent characters.
- *
- * The out-parameter MBC will be set to a pointer to the multi-byte character,
- * and the length thereof will be returned.
- *
- * Constraints:
- *
- * All returned pointers will remain valid until next_mbc is called again with a
- * non-null PTR.
- *
- * Do not pass pointers to non-UTF-8 strings in PTR. Do not call with null PTR
- * argument before calling with a non-null PTR argument. Do not call with a null
- * PTR argument after a null character (mbc->first) is returned. Do not call
- * with a null MBC argument. */
+
+   Call with non-null PTR to set up internal static variable and get the first
+   character, call with null PTR to get subsequent characters.
+
+   The out-parameter MBC will be set to a pointer to the multi-byte character,
+   and the length thereof will be returned.
+
+   Constraints:
+
+   All returned pointers will remain valid until next_mbc is called again with a
+   non-null PTR.
+
+   Do not pass pointers to non-UTF-8 strings in PTR. Do not call with null PTR
+   argument before calling with a non-null PTR argument. Do not call with a null
+   PTR argument after a null character (mbc->first) is returned. Do not call
+   with a null MBC argument. */
 unsigned next_mbc(char8_t* ptr, MBC mbc[static 1]) {
     static char8_t* s = NULL;
     if (ptr) {
@@ -86,7 +86,7 @@ unsigned next_mbc(char8_t* ptr, MBC mbc[static 1]) {
         memcpy(s, ptr, len);
     };
 
-    *mbc = (MBC)s;
+     mbc = (MBC)s;
 
     unsigned len;
     {

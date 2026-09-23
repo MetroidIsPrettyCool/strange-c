@@ -1,6 +1,6 @@
 /* C has a lot of features that all end with "of", all with slightly different
- * semantics. This demo does not require any particular C version, we discuss
- * them all. */
+   semantics. This demo does not require any particular C version, we discuss
+   them all. */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,7 +26,7 @@
 size_t return_sizeof(int array[32]);
 size_t return_sizeof2(int (*array)[32]);
                     /* This ↑ is the syntax for declaring pointers to arrays. I
-                     * don't like it either. */
+                       don't like it either. */
 
 #if HAVE_VLAS
     size_t return_sizeof_vla(size_t n, int array[n]);
@@ -42,11 +42,11 @@ int main(void) {
     }
 
     /* sizeof has been here since C89. It's is a language-level operator that
-     * takes a type or expression and evaluates to the size of that type or
-     * expression in bytes -- itself an expression of type size_t. */
+       takes a type or expression and evaluates to the size of that type or
+       expression in bytes -- itself an expression of type size_t. */
 
     /* Confusingly, sizeof has two forms depending what its argument is. If its
-     * a type, you have to use parens, as if it were a function call: */
+       a type, you have to use parens, as if it were a function call: */
     {
         struct foo { int a; char b; };
         size_t n = sizeof(struct foo);
@@ -61,7 +61,7 @@ int main(void) {
     }
 
     /* But you still can anyway, since the expression (E1) is congruent to
-     * E1: */
+       E1: */
     {
         int x = 4 + 3;
         size_t n = sizeof x;
@@ -70,7 +70,7 @@ int main(void) {
     }
 
     /* Note that sizeof, as a unary prefix operator, has right-to-left
-     * associativity and belongs to the second-lower precedence class: */
+       associativity and belongs to the second-lower precedence class: */
     {
         struct foo { int a; } x;
         int y;
@@ -95,8 +95,8 @@ int main(void) {
     }
 
     /* sizeof is the only operator with this syntax quirk. ¯\_(ツ)_/¯ Certain
-     * style guides will argue for one or the other as a matter of brevity vs.
-     * consistency. */
+       style guides will argue for one or the other as a matter of brevity vs.
+       consistency. */
 
     /* sizeof also has a few other special quirks regarding arrays. The size of
        an array type is product of the size of the element type with the count
@@ -108,7 +108,7 @@ int main(void) {
     }
 
     /* This can be used to create a macro for getting the count of elements in
-     * an array: */
+       an array: */
     {
         #if __STDC_VERSION__ >= 199901L
             #define COUNTOF(...) (sizeof(__VA_ARGS__) / sizeof(*(__VA_ARGS__)))
@@ -122,7 +122,7 @@ int main(void) {
     }
 
     /* In C99 and later we can also use sizeof to get the size of VLAs (at
-     * runtime!): */
+       runtime!): */
     #if HAVE_VLAS
         {
             size_t n = 32;
@@ -131,16 +131,16 @@ int main(void) {
             assert(n == 32 * sizeof(int));
 
             /* Because the size of foo is determined at runtime, we can't use
-             * sizeof foo in contexts where a (integer) constant expression is
-             * required, such as in C11 static_asserts: */
+               sizeof foo in contexts where a (integer) constant expression is
+               required, such as in C11 static_asserts: */
 
             /* static_assert(sizeof foo == 32 * sizeof(int), "fail!"); */
         }
     #endif
 
     /* Note however that this does NOT work across function boundaries. Array
-     * parameters are "adjusted" to pointer type -- the only such case of "type
-     * adjustment" (as opposed to conversion) in the standard. A real pain! */
+       parameters are "adjusted" to pointer type -- the only such case of "type
+       adjustment" (as opposed to conversion) in the standard. A real pain! */
     {
         int array[32];
         assert(return_sizeof(array) == sizeof(int*));
@@ -167,12 +167,12 @@ int main(void) {
 
 
     /* The next "of" is also from C89, but its significantly more obscure. It's
-     * offsetof! */
+       offsetof! */
 
     /* offsetof is a macro, unlike sizeof, defined in <stddef.h>. It takes two
-     * macro arguments: a type and a member-designator; and it expands to a
-     * size_t expression containing the offset of that member from the beginning
-     * of an object of said type. */
+       macro arguments: a type and a member-designator; and it expands to a
+       size_t expression containing the offset of that member from the beginning
+       of an object of said type. */
     {
         struct foo {
             int a;
@@ -190,27 +190,27 @@ int main(void) {
     }
 
     /* This has been used to create a naïve sort of "alignment of" macro in many
-     * older codebases: */
+       older codebases: */
     {
         #if __STDC_VERSION__ <= 201710L
             #define ALIGNOF(X) offsetof(struct{char a; X b;}, b)
         #endif
     }
     /* Whether this actually works is implementation-defined -- implementors can
-     * insert padding for arbitrary reasons, not simply to satisfy alignment
-     * requirements -- and also probably UB prior to C23, as we're defining a
-     * type in offsetof rather than providing a type name.
-     *
-     * I do not recommend you use this macro. */
+       insert padding for arbitrary reasons, not simply to satisfy alignment
+       requirements -- and also probably UB prior to C23, as we're defining a
+       type in offsetof rather than providing a type name.
+
+       I do not recommend you use this macro. */
 
 
     /* Instead, consider using alignof, introduced in C11: */
 
     /* As is typical for new keywords, alignof was initially spelled "_Alignof"
-     * instead, and users were required to include the <stdalign.h> header to
-     * #define alignof _Alignof. As of C23, alignof is now a keyword in its own
-     * right, <stdalign.h> is an empty header, and _Alignof permitted as a
-     * legacy spelling. */
+       instead, and users were required to include the <stdalign.h> header to
+       #define alignof _Alignof. As of C23, alignof is now a keyword in its own
+       right, <stdalign.h> is an empty header, and _Alignof permitted as a
+       legacy spelling. */
     {
         #if __STDC_VERSION__ >= 201112L
             static_assert(
@@ -229,8 +229,8 @@ int main(void) {
     }
 
     /* Also like sizeof, character types are guaranteed to be the
-     * smallest/weakest, although alignof(char) is NOT guaranteed to be 1 like
-     * sizeof(char) is. */
+       smallest/weakest, although alignof(char) is NOT guaranteed to be 1 like
+       sizeof(char) is. */
     {
         #if __STDC_VERSION__ >= 201112L
             static_assert(
@@ -241,17 +241,17 @@ int main(void) {
     }
 
     /* The maximum (fundamental) alignment is that of the type max_align_t from
-     * <stddef.h>: */
+       <stddef.h>: */
     {
         #if __STDC_VERSION__ >= 201112L
             printf("alignof(max_align_t) = %zu\n", alignof(max_align_t));
         #endif
     }
     /* Why <stddef.h> and not <stdalign.h>? I have no idea. WG14 didn't want a
-     * repeat of __bool_true_false_are_defined, I guess. */
+       repeat of __bool_true_false_are_defined, I guess. */
 
     /* Some compilers will allow using alignof with expressions with the same
-     * syntax as sizeof as an extension. GCC, for example: */
+       syntax as sizeof as an extension. GCC, for example: */
     {
         #if __GNUC__ && __STDC_VERSION__ >= 201112L
             int x = 3;
@@ -260,11 +260,11 @@ int main(void) {
         #endif
     }
     /* Unfortunately even with -pedantic, GCC doesn't warn that this an
-     * extension. Clang does, though, with -Wgnu-alignof-expression. */
+       extension. Clang does, though, with -Wgnu-alignof-expression. */
 
 
     /* The portable alternative for this comes to us in C23 with our next two
-     * "of"s: typeof and typeof_unqual. */
+       "of"s: typeof and typeof_unqual. */
 
     /* As the name implies, they evaluate to types of expressions: */
     {
@@ -275,10 +275,10 @@ int main(void) {
         #endif
     }
     /* Unlike previous "of"s, they are not operators, they're specifiers.
-     * Confusingly, the standard also says that together they're called "the
-     * typeof operators", and goes on to call them operators individually, too.
-     * Also, unlike alignof, they were introduced as new keywords without a
-     * _Typeof spelling and corresponding header. Heavens knows why. */
+       Confusingly, the standard also says that together they're called "the
+       typeof operators", and goes on to call them operators individually, too.
+       Also, unlike alignof, they were introduced as new keywords without a
+       _Typeof spelling and corresponding header. Heavens knows why. */
 
     /* They can be used anywhere that a type name can: */
     {
@@ -288,12 +288,12 @@ int main(void) {
         #endif
     }
     /* (That's right. In C, character literals have the type int, and can
-     * include arbitrary numbers of characters. For... reasons. The value of
-     * such a literal is implementation-defined. In x64 Clang and GCC, it works
-     * like a string literal but with backwards endianness.) */
+       include arbitrary numbers of characters. For... reasons. The value of
+       such a literal is implementation-defined. In x64 Clang and GCC, it works
+       like a string literal but with backwards endianness.) */
 
     /* This is very useful for re-declaring functions with certain attributes,
-     * for example: */
+       for example: */
     {
         #if __STDC_VERSION__ >= 202311L
             extern typeof(sqrt) [[unsequenced]] sqrt;
@@ -328,7 +328,7 @@ int main(void) {
     }
 
     /* Both typeof and typeof_unqual may also be used with types instead of
-     * expressions, presumably to accommodate preprocessor nonsense: */
+       expressions, presumably to accommodate preprocessor nonsense: */
     {
         #if __STDC_VERSION__ >= 202311L
             typeof(int) x = 1;
@@ -337,14 +337,14 @@ int main(void) {
         #endif
     }
     /* Unlike sizeof, the parentheses are NOT optional when taking the type of
-     * an expression. */
+       an expression. */
 
 
     /* And that's it as of C23! 5 different "of"s, each with its own weird
-     * quirks. */
+       quirks. */
 
     /* It's not the end of "of", though. C2y is on the horizon with a sixth
-     * "of": countof! */
+       "of": countof! */
     {
         #if __STDC_VERSION__ > 202311L
             int array[23] = {};
@@ -352,14 +352,14 @@ int main(void) {
         #endif
     }
     /* countof is the operator replacement for our sizeof-based "number of
-     * elements in array" macro. Like alignof, the actual keyword being
-     * introduced is "_Countof", and the "countof" spelling is behind the
-     * stdcountof.h header. */
+       elements in array" macro. Like alignof, the actual keyword being
+       introduced is "_Countof", and the "countof" spelling is behind the
+       stdcountof.h header. */
 
     /* countof has essentially the same behavior as sizeof, although the operand
-     * needs to be of array type. You can elide parentheses when the operand is
-     * an expression, you can take the count of type names, and it works at
-     * runtime with VLAs: */
+       needs to be of array type. You can elide parentheses when the operand is
+       an expression, you can take the count of type names, and it works at
+       runtime with VLAs: */
     {
         #if __STDC_VERSION__ > 202311L
             int array[64] = {};

@@ -1,5 +1,5 @@
 /* The relationship between function types and the (de)referencing operators has
- * bizarre semantics. This demo requires C23 for the typeof() operator. */
+   bizarre semantics. This demo requires C23 for the typeof() operator. */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,7 +26,7 @@ int main() {
     assert(*foo == &foo);
 
     /* 2. You can dereference a function type as much as you want, and it's
-     *    still equivalent. */
+          still equivalent. */
 
     assert(*********************************************************foo == foo);
 
@@ -50,8 +50,8 @@ int main() {
     puts(_Generic(foo,typeof_unqual(&foo):"1",typeof_unqual(foo):"2"));
 
     /* 7. However, in a highly amusing twist, the implicit lvalue conversion
-     *    performed by _Generic() means &foo, foo, *foo, **foo, etc. will never
-     *    match typeof(foo) or typeof(*foo) in such an expression: */
+          performed by _Generic() means &foo, foo, *foo, **foo, etc. will never
+          match typeof(foo) or typeof(*foo) in such an expression: */
 
     puts(_Generic(&foo,typeof(&foo):"1",typeof(*foo):"2"));
     puts(_Generic(foo,typeof(&foo):"1",typeof(*foo):"2"));
@@ -71,7 +71,7 @@ int main() {
     puts(_Generic(***********************foo,typeof(foo):"2",typeof(&foo):"1"));
 
     /* In C2y we'll be able to get around this with _Generic(typeof(),...), but
-     * we aren't there just yet. */
+       we aren't there just yet. */
     #if __STDC_VERSION__ > 202311L
         puts(_Generic(typeof(*foo),typeof(&foo):"1",typeof(foo):"2"));
         puts(_Generic(typeof(foo), typeof(&foo):"1",typeof(foo):"2"));
@@ -79,9 +79,9 @@ int main() {
     #endif
 
     /* 8. That the expression before the parentheses lvalue-converts to a
-     *    function pointer is all that function calls are actually looking for,
-     *    by the way. You can be pair this with the comma and ternary operators
-     *    for some remarkably obscure constructions: */
+          function pointer is all that function calls are actually looking for,
+          by the way. You can be pair this with the comma and ternary operators
+          for some remarkably obscure constructions: */
 
     typeof(sin)* a = nullptr, * b = cos, * tmp;
     double f;
