@@ -80,8 +80,8 @@ int main() {
 
     /* 8. That the expression before the parentheses lvalue-converts to a
           function pointer is all that function calls are actually looking for,
-          by the way. You can be pair this with the comma and ternary operators
-          for some remarkably obscure constructions: */
+          by the way. You can pair this with the comma and ternary operators for
+          some remarkably obscure constructions: */
 
     typeof(sin)* a = nullptr, * b = cos, * tmp;
     double f;
