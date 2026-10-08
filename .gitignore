@@ -5,6 +5,7 @@ auto
 bswap
 comma
 cpp-embed
+cpp-eval-iteration
 cpp-self-include-iteration
 cpp-token-to-wcs
 designated-init
