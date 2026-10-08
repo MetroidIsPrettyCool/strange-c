@@ -5,6 +5,7 @@ auto
 bswap
 comma
 cpp-embed
+cpp-self-include-iteration
 cpp-token-to-wcs
 designated-init
 extern-unsequenced
@@ -13,7 +14,6 @@ iter-backwards
 non-empty-tfam
 non-int-const-size-expr
 of
-or-die
 reflection
 size-expr-stack-overflow
 static-array
